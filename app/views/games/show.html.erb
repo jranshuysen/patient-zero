@@ -22,3 +22,21 @@
 
 <%= link_to 'Edit', edit_game_path(@game) %> |
 <%= link_to 'Back', games_path %>
+
+
+
+<div id="map"></div>
+
+
+<script>
+$(function() {
+  Zombie.init(<%= @game.lat %>, <%= @game.long %>);
+
+  setTimeout(function() {
+    Zombie.startGame(52.016584,4.3506897)
+  }, 1000);
+  setTimeout(function() {
+    Zombie.moveMarker(52.01597,4.3500187)
+  }, 3000);
+})
+</script>

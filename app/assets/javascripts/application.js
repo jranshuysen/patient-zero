@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require turbolinks
+//
+//= require gmaps
+//
 //= require_tree .
 //= require_tree ./channels
