@@ -1,11 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  lat: 1.5
-  long: 1.5
-  game: one
+  name: MyString
+  lat: 
+  long: 
+  finished: 
 
 two:
-  lat: 1.5
-  long: 1.5
-  game: two
+  name: MyString
+  lat: 
+  long: 
+  finished: 
