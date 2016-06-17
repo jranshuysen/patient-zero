@@ -53,10 +53,20 @@ Zombie.init = function(lat, lng) {
           mapObject: null
         };
         Zombie.addZombieHorde(Zombie.hordes[data.horde.id]);
-        // Zombie.createHorde(data);
       }
     }
   });
+};
+
+Zombie.addZombieHordeFromDB = function(horde) {
+  Zombie.hordes[horde.id] = {
+    id: horde.id,
+    lat: horde.lat,
+    long: horde.long,
+    radius: horde.radius,
+    mapObject: null
+  };
+  Zombie.addZombieHorde(Zombie.hordes[horde.id]);
 };
 
 Zombie.moveMarker = function(lat, lng) {

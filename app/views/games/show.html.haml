@@ -31,4 +31,8 @@
     $('#add_horde').on('click', function(e) {
       Zombie.addZombieHorde({id: 0});
     });
+
+    #{
+      @game.hordes.map { |h| "Zombie.addZombieHordeFromDB({ id: #{h.id}, lat: #{h.lat}, long: #{h.long}, radius: #{h.radius} });" }.join(' ')
+    }
   })
