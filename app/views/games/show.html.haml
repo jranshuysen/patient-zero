@@ -8,11 +8,15 @@
 - else
   = button_to 'Stop!', post_stop_game_path(@game), class: 'btn btn-large btn-primary'
 
+.heart
+  .top-left
+  .top-right
+  .bottom
+
 #map
 
 :javascript
   $(function() {
-
     if(#{@game.lat.blank?}) {
       Zombie.init(52.016584, 4.3506897)
       Zombie.placeDestinationMarker(true)
