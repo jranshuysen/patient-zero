@@ -17,6 +17,10 @@ $navbar-default-link-color: $light_zombie;
 $navbar-default-link-hover-color: $dark_zombie;
 $navbar-default-link-hover-bg: $light_zombie;
 
+$btn-primary-color: $light_zombie;
+$btn-primary-bg: $dark_zombie;
+$btn-primary-border: $darkest_zombie;
+
 @import "bootstrap";
 @import "rails_bootstrap_forms";
 @import "bootstrap_overrides";

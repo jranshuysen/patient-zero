@@ -1,24 +1,6 @@
 %p#notice= notice
 
-%p
-  %b Name:
-  = @game.name
-%p
-  %b Lat:
-  = @game.lat
-%p
-  %b Long:
-  = @game.long
-%p
-  %b Finished:
-  = @game.finished
-
-= link_to 'Edit', edit_game_path(@game)
-\|
-= link_to 'Back', games_path
-
 #map
-
 
 :javascript
   $(function() {

@@ -4,7 +4,8 @@ class GamesController < ApplicationController
   # GET /games
   # GET /games.json
   def index
-    @games = Game.all
+    # go to running game / show button
+    redirect_to game_path Game.running.first if Game.running.first
   end
 
   # GET /games/1
@@ -19,6 +20,16 @@ class GamesController < ApplicationController
 
   # GET /games/1/edit
   def edit
+  end
+
+  # POST /games/new
+  def create_new
+    redirect_to game_path Game.running.first if Game.running.first
+
+    game = Game.new(finished: false)
+    game.save
+
+    redirect_to game_path game
   end
 
   # POST /games
