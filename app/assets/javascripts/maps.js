@@ -46,6 +46,43 @@ Zombie.startGame = function(lat, lng) {
   Zombie.moveMarker(lat, lng)
 };
 
+Zombie.addZombieHorde = function(position) {
+  position = Zombie.map.getCenter();
+  var horde = new google.maps.Circle({
+    strokeColor: '#514A44',
+    strokeOpacity: 0.8,
+    strokeWeight: 2,
+    fillColor: '#514A44',
+    fillOpacity: 0.35,
+    map: Zombie.map,
+    center: position,
+    radius: 10,
+    draggable: true,
+    editable: true
+  });
+
+  google.maps.event.addListener(horde, 'dragend', function() {
+    // this is the shit
+    console.table(horde);
+  });
+  google.maps.event.addListener(horde, 'click', function() {
+    if(horde.editable) {
+      // active colors
+      horde.setOptions({
+        strokeColor:'#FF0000',
+        fillColor: '#FF0000'
+      });
+    } else {
+      // editable colors
+      horde.setOptions({
+        strokeColor:'#514A44',
+        fillColor: '#514A44'
+      });
+    }
+    horde.setEditable(!horde.editable)
+  });
+}
+
 Zombie.placeDestinationMarker = function(editable=false, lat=0, lng=0) {
   var position = Zombie.map.getCenter()
   if(lat != 0 && lng != 0) {
