@@ -5,7 +5,12 @@ class GamesController < ApplicationController
   # GET /games.json
   def index
     # go to running game / show button
-    redirect_to game_path Game.running.first if Game.running.first
+    if Game.running.first
+      respond_to do |format|
+        format.html { redirect_to game_path Game.running.first  }
+        format.json { redirect_to game_path Game.running.first, format: :json }
+      end
+    end
   end
 
   # GET /games/1
