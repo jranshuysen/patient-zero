@@ -3,7 +3,7 @@ var Zombie = {
   marker: null,
   route: null,
   cable: ActionCable.createConsumer()
-}
+};
 
 Zombie.init = function(lat, lng) {
   Zombie.map = new google.maps.Map(document.getElementById("map"), {

@@ -5,9 +5,6 @@ class LocationsController < ApplicationController
   # GET /locations.json
   def index
     @locations = Location.all
-    lat = rand(52.016868...52.017868)
-    lng = rand(4.3517107...4.3518107)
-    ActionCable.server.broadcast 'messages', lat: lat, long: lng
   end
 
   # GET /locations/1
@@ -31,10 +28,6 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       if @location.save
-        ActionCable.server.broadcast 'messages',
-          lat: @location.lat,
-          long: @location.long
-
         format.html { redirect_to @location, notice: 'Location was successfully created.' }
         format.json { render :show, status: :created, location: @location }
       else

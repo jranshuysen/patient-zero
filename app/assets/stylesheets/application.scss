@@ -1,0 +1,22 @@
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "bootstrap-sprockets";
+
+$light_zombie: #b2a49b;
+$dark_zombie: #78685e;
+$darkest_zombie: #3c2516;
+
+$link-color: $darkest_zombie;
+
+$body-bg: $light_zombie;
+$text-color: $dark_zombie;
+
+$navbar-default-color: $dark_zombie;
+$navbar-default-bg: $darkest_zombie;
+
+$navbar-default-link-color: $light_zombie;
+$navbar-default-link-hover-color: $dark_zombie;
+$navbar-default-link-hover-bg: $light_zombie;
+
+@import "bootstrap";
+@import "rails_bootstrap_forms";
+@import "bootstrap_overrides";

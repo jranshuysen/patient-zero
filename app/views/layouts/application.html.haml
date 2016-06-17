@@ -1,0 +1,37 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Haptventure
+    = csrf_meta_tags
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
+    %script{:src => "//maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry", :type => "text/javascript"}
+    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+    = action_cable_meta_tag
+
+  %body{class: "#{controller.controller_name}"}
+    .wrapper
+    %nav.navbar.navbar-default.navbar-fixed-top{role: 'navigation'}
+      .navbar-header
+        %button.navbar-toggle.collapsed{'aria-controls' => 'navbar', 'aria-expanded' => 'false', 'data-target' => '#navbar', 'data-toggle' => 'collapse', type: 'button'}
+          %span.sr-only Toggle navigation
+          %span.icon-bar
+          %span.icon-bar
+
+        = link_to "#", root_path, class: 'navbar-brand'
+
+      #navbar.collapse.navbar-collapse
+        %ul.nav.navbar-nav
+          %ul.nav.navbar-nav.navbar-right
+            %li= link_to Game.model_name.human(count: 2), games_path
+            %li= link_to Location.model_name.human(count: 2), locations_path
+
+
+    .container-fluid.content
+      - flash.each do |type, msg|
+        %div{class: "alert alert-#{type == 'alert' ? 'danger' : 'success'} alert-dismissable", role: 'alert'}
+          %button.close{type: 'button', data: {dismiss: 'alert'}, aria: {label: 'Close'}}
+            %span{aria: {hidden: 'true'}} &times;
+          = msg if msg.is_a?(String)
+
+      = yield

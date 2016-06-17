@@ -182,8 +182,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  autoprefixer-rails
-  bootstrap-sass (~> 3.3.1)
+  bootstrap-sass
   bootstrap_form
   bower-rails (~> 0.10.0)
   byebug

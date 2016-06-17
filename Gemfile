@@ -38,9 +38,7 @@ gem 'jbuilder', '~> 2.0'
 # gem 'capistrano-rails', group: :development
 
 gem 'bower-rails', '~> 0.10.0'
-
-gem 'bootstrap-sass', '~> 3.3.1'
-gem 'autoprefixer-rails'
+gem 'bootstrap-sass'
 gem 'bootstrap_form'
 
 group :development, :test do
