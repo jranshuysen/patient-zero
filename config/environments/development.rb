@@ -50,5 +50,5 @@ Rails.application.configure do
   config.file_watcher = ActiveSupport::EventedFileUpdateChecker
 
   config.action_cable.url = "ws://localhost:3000/cable"
-  config.action_cable.allowed_request_origins = [/http:\/\/*.*/]
+  config.action_cable.allowed_request_origins = [/http:\/\/localhost*/, /http:\/\/*.ngrok.io/]
 end
