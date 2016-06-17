@@ -1,0 +1,2 @@
+module HordesHelper
+end

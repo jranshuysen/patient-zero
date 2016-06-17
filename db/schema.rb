@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160610125220) do
+ActiveRecord::Schema.define(version: 20160617115823) do
 
   create_table "games", force: :cascade do |t|
     t.string   "name"
@@ -20,6 +20,16 @@ ActiveRecord::Schema.define(version: 20160610125220) do
     t.boolean  "finished"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "hordes", force: :cascade do |t|
+    t.float    "lat"
+    t.float    "long"
+    t.integer  "radius"
+    t.integer  "game_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["game_id"], name: "index_hordes_on_game_id"
   end
 
   create_table "locations", force: :cascade do |t|

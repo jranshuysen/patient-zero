@@ -1,0 +1,27 @@
+%h1 Listing hordes
+
+%table
+  %thead
+    %tr
+      %th Lat
+      %th Long
+      %th Radius
+      %th Game
+      %th
+      %th
+      %th
+
+  %tbody
+    - @hordes.each do |horde|
+      %tr
+        %td= horde.lat
+        %td= horde.long
+        %td= horde.radius
+        %td= horde.game
+        %td= link_to 'Show', horde
+        %td= link_to 'Edit', edit_horde_path(horde)
+        %td= link_to 'Destroy', horde, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Horde', new_horde_path

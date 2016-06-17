@@ -3,7 +3,8 @@ var Zombie = {
   marker: null,
   destinationMarker: null,
   route: null,
-  cable: ActionCable.createConsumer()
+  cable: ActionCable.createConsumer(),
+  cable_channel: null
 };
 
 Zombie.init = function(lat, lng) {
@@ -28,9 +29,19 @@ Zombie.init = function(lat, lng) {
     map: Zombie.map
   });
 
-  Zombie.cable.subscriptions.create('MessagesChannel', {
+  Zombie.cable_channel = Zombie.cable.subscriptions.create('MessagesChannel', {
     received: function(data) {
-      Zombie.moveMarker(data.lat, data.long);
+      // Possible 'action'
+      // - move_target
+      // - create_horde
+      // - update_horde
+      if(data.action == 'move_target') {
+        Zombie.moveMarker(data.lat, data.long);
+      } else if(data.action == 'update_horde') {
+
+      } else if(data.action == 'create_horde') {
+        Zombie.createHorde(data);
+      }
     }
   });
 };
@@ -44,6 +55,11 @@ Zombie.moveMarker = function(lat, lng) {
 
 Zombie.startGame = function(lat, lng) {
   Zombie.moveMarker(lat, lng)
+};
+
+Zombie.createHorde = function(data) {
+  // create horde
+  console.log(data);
 };
 
 Zombie.addZombieHorde = function(position) {
@@ -64,7 +80,14 @@ Zombie.addZombieHorde = function(position) {
   google.maps.event.addListener(horde, 'dragend', function() {
     // this is the shit
     console.table(horde);
+    var object = {
+      lat: horde.getCenter().lat(),
+      long: horde.getCenter().lng(),
+      radius: horde.getRadius()
+    }
+    Zombie.cable_channel.perform('create_horde', object);
   });
+
   google.maps.event.addListener(horde, 'click', function() {
     if(horde.editable) {
       // active colors

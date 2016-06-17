@@ -1,0 +1,22 @@
+= form_for @horde do |f|
+  - if @horde.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@horde.errors.count, "error")} prohibited this horde from being saved:"
+      %ul
+        - @horde.errors.full_messages.each do |msg|
+          %li= msg
+
+  .field
+    = f.label :lat
+    = f.text_field :lat
+  .field
+    = f.label :long
+    = f.text_field :long
+  .field
+    = f.label :radius
+    = f.number_field :radius
+  .field
+    = f.label :game
+    = f.text_field :game
+  .actions
+    = f.submit 'Save'
