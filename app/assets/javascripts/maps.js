@@ -61,9 +61,11 @@ Zombie.placeDestinationMarker = function(editable=false, lat=0, lng=0) {
   });
 
   if(editable) {
-    google.maps.event.addListener(gameMarker, 'dragend', function() {
-      // this is the shit
-      console.log(gameMarker.getPosition());
+    google.maps.event.addListener(Zombie.destinationMarker, 'dragend', function() {
+      position = Zombie.destinationMarker.getPosition();
+
+      $('#game_lat').val(position.lat());
+      $('#game_long').val(position.lng());
     });
   }
 }

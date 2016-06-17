@@ -1,5 +1,13 @@
 %p#notice= notice
 
+- if @game.lat.blank?
+  = bootstrap_form_for(@game) do |f|
+    =f.hidden_field :lat
+    =f.hidden_field :long
+    =f.primary 'start'
+- else
+  = button_to 'Stop!', post_stop_game_path(@game), class: 'btn btn-large btn-primary'
+
 #map
 
 :javascript

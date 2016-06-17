@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit, :update, :destroy]
+  before_action :set_game, only: [:show, :edit, :update, :destroy, :finish]
 
   # GET /games
   # GET /games.json
@@ -32,6 +32,13 @@ class GamesController < ApplicationController
     redirect_to game_path game
   end
 
+  # POST /games/1/finish
+  def finish
+    @game.update_attribute(:finished, true)
+
+    redirect_to action: "index"
+  end
+
   # POST /games
   # POST /games.json
   def create
@@ -53,7 +60,7 @@ class GamesController < ApplicationController
   def update
     respond_to do |format|
       if @game.update(game_params)
-        format.html { redirect_to @game, notice: 'Game was successfully updated.' }
+        format.html { redirect_to @game, notice: 'Game was successfully started.' }
         format.json { render :show, status: :ok, location: @game }
       else
         format.html { render :edit }
