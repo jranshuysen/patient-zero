@@ -12,12 +12,12 @@ Zombie.init = function(lat, lng) {
   Zombie.map = new google.maps.Map(document.getElementById("map"), {
     center: new google.maps.LatLng(lat, lng),
     zoom: 18,
-    mapTypeId: google.maps.MapTypeId.ROADMAP
+    icon: '/images/patient-zero-marker.png'
   });
 
   Zombie.marker = new google.maps.Marker({
     map: Zombie.map,
-    icon:"http://maps.google.com/mapfiles/ms/micons/blue.png"
+    icon: '/images/location-marker.png'
   });
 
   Zombie.route = new google.maps.Polyline({
@@ -172,7 +172,7 @@ Zombie.placeDestinationMarker = function(editable=false, lat=0, lng=0) {
     draggable: editable,
     animation: google.maps.Animation.DROP,
     position: position,
-    icon: "http://maps.google.com/mapfiles/ms/micons/red.png",
+    icon: '/images/patient-zero-marker.png'
   });
 
   if(editable) {
