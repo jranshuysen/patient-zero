@@ -7,6 +7,7 @@
     =f.primary 'start'
 - else
   = button_to 'Stop!', post_stop_game_path(@game), class: 'btn btn-large btn-primary'
+  %button#add_horde.btn.btn-large.btn-primary Add zombie horde
 
 .heart
   .top-left
@@ -25,6 +26,9 @@
       Zombie.init(#{@game.lat || 0}, #{@game.long || 0});
       Zombie.placeDestinationMarker(false, #{@game.lat || 0}, #{@game.long || 0})
       Zombie.startGame(52.016584,4.3506897)
-
     }
+
+    $('#add_horde').on('click', function(e) {
+      Zombie.addZombieHorde({id: 0});
+    });
   })

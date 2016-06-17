@@ -4,7 +4,8 @@ var Zombie = {
   destinationMarker: null,
   route: null,
   cable: ActionCable.createConsumer(),
-  cable_channel: null
+  cable_channel: null,
+  hordes: {}
 };
 
 Zombie.init = function(lat, lng) {
@@ -38,9 +39,21 @@ Zombie.init = function(lat, lng) {
       if(data.action == 'move_target') {
         Zombie.moveMarker(data.lat, data.long);
       } else if(data.action == 'update_horde') {
-
+        // moving horde!
+        var position = new google.maps.LatLng(data.horde.lat, data.horde.long);
+        Zombie.hordes[data.horde.id].mapObject.setCenter(position);
+        Zombie.hordes[data.horde.id].mapObject.setRadius(data.horde.radius);
       } else if(data.action == 'create_horde') {
-        Zombie.createHorde(data);
+        // add new horde!
+        Zombie.hordes[data.horde.id] = {
+          id: data.horde.id,
+          lat: data.horde.lat,
+          long: data.horde.long,
+          radius: data.horde.radius,
+          mapObject: null
+        };
+        Zombie.addZombieHorde(Zombie.hordes[data.horde.id]);
+        // Zombie.createHorde(data);
       }
     }
   });
@@ -62,48 +75,90 @@ Zombie.createHorde = function(data) {
   console.log(data);
 };
 
-Zombie.addZombieHorde = function(position) {
-  position = Zombie.map.getCenter();
-  var horde = new google.maps.Circle({
-    strokeColor: '#514A44',
+Zombie.addZombieHorde = function(horde) {
+  if(horde.id == 0) {
+    var center = Zombie.map.getCenter()
+    var radius = 10;
+    var editable = true;
+    var color = '#514A44'
+  }
+  else {
+    var center = new google.maps.LatLng(horde.lat, horde.long);
+    var radius = horde.radius;
+    var editable = false;
+    var color = '#FF0000';
+  }
+  var hordeMapCircle = new google.maps.Circle({
+    strokeColor: color,
     strokeOpacity: 0.8,
     strokeWeight: 2,
-    fillColor: '#514A44',
+    fillColor: color,
     fillOpacity: 0.35,
     map: Zombie.map,
-    center: position,
-    radius: 10,
-    draggable: true,
-    editable: true
+    center: center,
+    radius: radius,
+    draggable: editable,
+    editable: editable
   });
 
-  google.maps.event.addListener(horde, 'dragend', function() {
-    // this is the shit
-    console.table(horde);
-    var object = {
-      lat: horde.getCenter().lat(),
-      long: horde.getCenter().lng(),
-      radius: horde.getRadius()
-    }
-    Zombie.cable_channel.perform('create_horde', object);
+  $(hordeMapCircle).data('horde', horde);
+  horde.mapObject = hordeMapCircle;
+
+  google.maps.event.addListener(hordeMapCircle, 'drag', function() {
+    Zombie.move_horde_map_object(hordeMapCircle)
   });
 
-  google.maps.event.addListener(horde, 'click', function() {
-    if(horde.editable) {
+  google.maps.event.addListener(hordeMapCircle, 'click', function() {
+    var horde = $(hordeMapCircle).data('horde')
+    if(hordeMapCircle.editable) {
       // active colors
-      horde.setOptions({
+      hordeMapCircle.setOptions({
         strokeColor:'#FF0000',
-        fillColor: '#FF0000'
+        fillColor: '#FF0000',
+        draggable: false
       });
+      // finished editing/creating
+      var object = {
+        id: horde.id,
+        lat: hordeMapCircle.getCenter().lat(),
+        long: hordeMapCircle.getCenter().lng(),
+        radius: hordeMapCircle.getRadius(),
+      };
+      if(horde.id == 0) {
+        // create
+        Zombie.cable_channel.perform('create_horde', object)
+        hordeMapCircle.setMap(null)
+      } else {
+        // update
+        Zombie.cable_channel.perform('update_horde', object)
+      }
     } else {
       // editable colors
-      horde.setOptions({
+      hordeMapCircle.setOptions({
         strokeColor:'#514A44',
-        fillColor: '#514A44'
+        fillColor: '#514A44',
+        draggable: true
       });
     }
-    horde.setEditable(!horde.editable)
+    hordeMapCircle.setEditable(!hordeMapCircle.editable)
+    // hordeMapCircle.setDragable(!hordeMapCircle.dragable)
   });
+};
+
+Zombie.move_horde_map_object = function(hordeMapCircle) {
+  var horde = $(hordeMapCircle).data('horde')
+  if(horde.id == 0) {
+    return
+  }
+  // this is the shit
+  // console.table($(hordeMapCircle).data('horde'));
+  var object = {
+    id: horde.id,
+    lat: hordeMapCircle.getCenter().lat(),
+    long: hordeMapCircle.getCenter().lng(),
+    radius: hordeMapCircle.getRadius()
+  }
+  Zombie.cable_channel.perform('move_horde', object);
 }
 
 Zombie.placeDestinationMarker = function(editable=false, lat=0, lng=0) {
