@@ -6,6 +6,9 @@ gem 'rails', '>= 5.0.0.rc1', '< 5.1'
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
+# haml!
+gem 'haml-rails'
+
 # we need apie
 # gem 'rails-api'
 
@@ -35,6 +38,10 @@ gem 'jbuilder', '~> 2.0'
 # gem 'capistrano-rails', group: :development
 
 gem 'bower-rails', '~> 0.10.0'
+
+gem 'bootstrap-sass', '~> 3.3.1'
+gem 'autoprefixer-rails'
+gem 'bootstrap_form'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
