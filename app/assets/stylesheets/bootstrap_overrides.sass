@@ -29,3 +29,48 @@ html, body
 #panorama
   height: 500px
   background: #6699cc
+
+
+.heart
+  display: inline-block
+  position: absolute
+  right: -35%
+  width: 30%
+  animation: beat 0.7s ease 0s infinite normal
+
+  .top-left
+    width: 200px
+    height: 200px
+    background-color: #F00
+    border-radius: 200px
+    position: relative
+    background-image: linear-gradient(bottom, #FF0000 0%, #FF0000 56%, #D40707 100%)
+    background-image: -webkit-linear-gradient(bottom, #FF0000 0%, #FF0000 56%, #D40707 100%)
+
+  .top-right
+    width: 200px
+    height: 200px
+    background-color: #F00
+    border-radius: 200px
+    left: 150px
+    top: -200px
+    z-index: -1
+    position: relative
+
+  .bottom
+    left: 75px
+    top: -325px
+    width: 200px
+    height: 200px
+    background-color: #F00
+    transform: rotate(45deg)
+    position: relative
+    z-index: -1
+
+  @keyframes beat
+    0%
+      transform: scale(1)
+    30%
+      transform: scale(1.1)
+    80%
+      transform: scale(1)
