@@ -4,11 +4,15 @@
 
 :javascript
   $(function() {
-    Zombie.init( #{@game.lat}, #{@game.long});
-    setTimeout(function() {
+
+    if(#{@game.lat.blank?}) {
+      Zombie.init(52.016584, 4.3506897)
+      Zombie.placeDestinationMarker(true)
+    }
+    else {
+      Zombie.init(#{@game.lat || 0}, #{@game.long || 0});
+      Zombie.placeDestinationMarker(false, #{@game.lat || 0}, #{@game.long || 0})
       Zombie.startGame(52.016584,4.3506897)
-    }, 1000);
-    setTimeout(function() {
-      Zombie.moveMarker(52.01597,4.3500187)
-    }, 3000);
+
+    }
   })
