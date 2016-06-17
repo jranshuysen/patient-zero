@@ -1,1 +1,2 @@
-json.extract! @game, :id, :name, :lat, :long, :finished, :created_at, :updated_at
+json.(@game, :id, :name, :lat, :long, :finished)
+json.hordes @game.hordes, :id, :lat, :long, :radius
