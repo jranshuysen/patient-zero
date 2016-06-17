@@ -28,6 +28,11 @@ class LocationsController < ApplicationController
 
     respond_to do |format|
       if @location.save
+        ActionCable.server.broadcast 'messages',
+          action: 'move_target',
+          lat: @location.lat,
+          long: @location.long
+
         format.html { redirect_to @location, notice: 'Location was successfully created.' }
         format.json { render :show, status: :created, location: @location }
       else

@@ -36,10 +36,16 @@ Zombie.init = function(lat, lng) {
       // - move_target
       // - create_horde
       // - update_horde
+      // console.log(data.action, data)
       if(data.action == 'move_target') {
         Zombie.moveMarker(data.lat, data.long);
       } else if(data.action == 'update_horde') {
         // moving horde!
+        // trying to update a editable horde
+        if(Zombie.hordes[data.horde.id].editing) {
+          return
+        }
+
         var position = new google.maps.LatLng(data.horde.lat, data.horde.long);
         Zombie.hordes[data.horde.id].mapObject.setCenter(position);
         Zombie.hordes[data.horde.id].mapObject.setRadius(data.horde.radius);
@@ -50,7 +56,8 @@ Zombie.init = function(lat, lng) {
           lat: data.horde.lat,
           long: data.horde.long,
           radius: data.horde.radius,
-          mapObject: null
+          mapObject: null,
+          editing: false
         };
         Zombie.addZombieHorde(Zombie.hordes[data.horde.id]);
       }
@@ -64,7 +71,8 @@ Zombie.addZombieHordeFromDB = function(horde) {
     lat: horde.lat,
     long: horde.long,
     radius: horde.radius,
-    mapObject: null
+    mapObject: null,
+    editing: false
   };
   Zombie.addZombieHorde(Zombie.hordes[horde.id]);
 };
@@ -73,16 +81,10 @@ Zombie.moveMarker = function(lat, lng) {
   var latlng = new google.maps.LatLng(lat, lng);
   Zombie.marker.setPosition(latlng);
   Zombie.route.getPath().push(latlng);
-  Zombie.map.panTo(latlng);
 }
 
 Zombie.startGame = function(lat, lng) {
   Zombie.moveMarker(lat, lng)
-};
-
-Zombie.createHorde = function(data) {
-  // create horde
-  console.log(data);
 };
 
 Zombie.addZombieHorde = function(horde) {
@@ -150,8 +152,8 @@ Zombie.addZombieHorde = function(horde) {
         draggable: true
       });
     }
+    horde.editing = !hordeMapCircle.editable;
     hordeMapCircle.setEditable(!hordeMapCircle.editable)
-    // hordeMapCircle.setDragable(!hordeMapCircle.dragable)
   });
 };
 
@@ -160,8 +162,7 @@ Zombie.move_horde_map_object = function(hordeMapCircle) {
   if(horde.id == 0) {
     return
   }
-  // this is the shit
-  // console.table($(hordeMapCircle).data('horde'));
+
   var object = {
     id: horde.id,
     lat: hordeMapCircle.getCenter().lat(),

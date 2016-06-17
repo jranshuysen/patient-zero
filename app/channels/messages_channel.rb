@@ -11,12 +11,7 @@ class MessagesChannel < ApplicationCable::Channel
   end
 
   def move_horde(data)
-    horde = Horde.find(data['id'])
-    horde.lat = data['lat']
-    horde.long = data['long']
-    horde.radius = data['radius']
-
-    send_horde_message 'update_horde', horde
+    send_horde_message 'update_horde', data
   end
 
   def update_horde(data)
