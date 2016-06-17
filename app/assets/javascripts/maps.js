@@ -47,3 +47,18 @@ Zombie.moveMarker = function(lat, lng) {
 Zombie.startGame = function(lat, lng) {
   Zombie.moveMarker(lat, lng)
 };
+
+Zombie.placeGameStart = function() {
+  var gameMarker = new google.maps.Marker({
+    map: Zombie.map,
+    draggable:true,
+    animation: google.maps.Animation.DROP,
+    position: Zombie.map.getCenter(),
+    icon: "http://maps.google.com/mapfiles/ms/micons/red.png",
+  });
+
+  google.maps.event.addListener(gameMarker, 'dragend', function() {
+    // this is the shit
+    console.log(gameMarker.getPosition());
+  });
+}
