@@ -23,7 +23,7 @@
   $(function() {
     if(#{@game.lat.blank?}) {
       Zombie.init(52.016584, 4.3506897)
-      Zombie.placeDestinationMarker(true)
+      Zombie.placeDestinationMarker(true, 0, 0)
     }
     else {
       Zombie.init(#{@game.lat || 0}, #{@game.long || 0});

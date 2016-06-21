@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20160617115823) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "games", force: :cascade do |t|
     t.string   "name"
     t.float    "lat"
@@ -29,7 +32,7 @@ ActiveRecord::Schema.define(version: 20160617115823) do
     t.integer  "game_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["game_id"], name: "index_hordes_on_game_id"
+    t.index ["game_id"], name: "index_hordes_on_game_id", using: :btree
   end
 
   create_table "locations", force: :cascade do |t|
@@ -38,7 +41,9 @@ ActiveRecord::Schema.define(version: 20160617115823) do
     t.integer  "game_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["game_id"], name: "index_locations_on_game_id"
+    t.index ["game_id"], name: "index_locations_on_game_id", using: :btree
   end
 
+  add_foreign_key "hordes", "games"
+  add_foreign_key "locations", "games"
 end

@@ -15,7 +15,5 @@
 //
 //= require bootstrap-sprockets
 //
-//= require gmaps
-//
 //= require_tree .
 //= require_tree ./channels

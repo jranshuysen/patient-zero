@@ -180,7 +180,7 @@ Zombie.move_horde_map_object = function(hordeMapCircle) {
   Zombie.cable_channel.perform('move_horde', object);
 }
 
-Zombie.placeDestinationMarker = function(editable=false, lat=0, lng=0) {
+Zombie.placeDestinationMarker = function(editable, lat, lng) {
   var position = Zombie.map.getCenter()
   if(lat != 0 && lng != 0) {
     position = new google.maps.LatLng(lat, lng);
@@ -202,4 +202,4 @@ Zombie.placeDestinationMarker = function(editable=false, lat=0, lng=0) {
       $('#game_long').val(position.lng());
     });
   }
-}
+};
