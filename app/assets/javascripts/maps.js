@@ -9,11 +9,19 @@ var Zombie = {
 };
 
 Zombie.init = function(lat, lng) {
+  $('#map, #panorama').height($(window).height() - 100)
+  var styles = [{"featureType":"all","elementType":"all","stylers":[{"visibility":"simplified"},{"saturation":"-100"},{"invert_lightness":true},{"lightness":"11"},{"gamma":"1.27"}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"hue":"#ff0000"},{"visibility":"simplified"},{"invert_lightness":true},{"lightness":"-10"},{"gamma":"0.54"},{"saturation":"45"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#ff0000"},{"saturation":"75"},{"lightness":"24"},{"gamma":"0.70"},{"invert_lightness":true}]},{"featureType":"poi.government","elementType":"all","stylers":[{"hue":"#ff0000"},{"visibility":"simplified"},{"invert_lightness":true},{"lightness":"-24"},{"gamma":"0.59"},{"saturation":"59"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"simplified"},{"invert_lightness":true},{"hue":"#ff0000"},{"saturation":"73"},{"lightness":"-24"},{"gamma":"0.59"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"lightness":"-41"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#ff0000"},{"invert_lightness":true},{"saturation":"43"},{"lightness":"-16"},{"gamma":"0.73"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"hue":"#ff0000"},{"saturation":"43"},{"lightness":"-11"},{"gamma":"0.73"},{"invert_lightness":true}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":"45"},{"lightness":"53"},{"gamma":"0.67"},{"invert_lightness":true},{"hue":"#ff0000"},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#ff0000"},{"saturation":"38"},{"lightness":"-16"},{"gamma":"0.86"}]}]
+  var styledMap = new google.maps.StyledMapType(styles, {name: "Zombie"});
   Zombie.map = new google.maps.Map(document.getElementById("map"), {
     center: new google.maps.LatLng(lat, lng),
     zoom: 18,
-    icon: '/images/patient-zero-marker.png'
+    icon: '/images/patient-zero-marker.png',
+    mapTypeControlOptions: {
+      mapTypeIds: [google.maps.MapTypeId.ROADMAP, 'map_style']
+    }
   });
+  Zombie.map.mapTypes.set('map_style', styledMap);
+  Zombie.map.setMapTypeId('map_style');
 
   Zombie.marker = new google.maps.Marker({
     map: Zombie.map,
@@ -92,13 +100,13 @@ Zombie.addZombieHorde = function(horde) {
     var center = Zombie.map.getCenter()
     var radius = 10;
     var editable = true;
-    var color = '#514A44'
+    var color = '#00C000'
   }
   else {
     var center = new google.maps.LatLng(horde.lat, horde.long);
     var radius = horde.radius;
     var editable = false;
-    var color = '#FF0000';
+    var color = '#831BE5';
   }
   var hordeMapCircle = new google.maps.Circle({
     strokeColor: color,
@@ -125,8 +133,8 @@ Zombie.addZombieHorde = function(horde) {
     if(hordeMapCircle.editable) {
       // active colors
       hordeMapCircle.setOptions({
-        strokeColor:'#FF0000',
-        fillColor: '#FF0000',
+        strokeColor:'#831BE5',
+        fillColor: '#831BE5',
         draggable: false
       });
       // finished editing/creating
@@ -147,8 +155,8 @@ Zombie.addZombieHorde = function(horde) {
     } else {
       // editable colors
       hordeMapCircle.setOptions({
-        strokeColor:'#514A44',
-        fillColor: '#514A44',
+        strokeColor:'#00C000',
+        fillColor: '#00C000',
         draggable: true
       });
     }

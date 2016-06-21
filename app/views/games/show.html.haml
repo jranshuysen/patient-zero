@@ -6,8 +6,11 @@
     =f.hidden_field :long
     =f.primary 'start'
 - else
-  = button_to 'Stop!', post_stop_game_path(@game), class: 'btn btn-large btn-primary'
-  %button#add_horde.btn.btn-large.btn-primary Add zombie horde
+  .row
+    .col-xs-6= button_to 'Stop!', post_stop_game_path(@game), class: 'btn btn-large btn-primary'
+    .col-xs-6
+      .pull-right
+        %button#add_horde.btn.btn-large.btn-primary Add zombie horde
 
 .heart
   .top-left
