@@ -2,7 +2,7 @@
 %html
   %head
     %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
-    %title Haptventure
+    %title Patient Ø
     = csrf_meta_tags
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     %script{:src => "//maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry", :type => "text/javascript"}
@@ -12,10 +12,4 @@
   %body{class: "#{controller.controller_name}"}
     .wrapper
       .container-fluid.content
-        - flash.each do |type, msg|
-          %div{class: "alert alert-#{type == 'alert' ? 'danger' : 'success'} alert-dismissable", role: 'alert'}
-            %button.close{type: 'button', data: {dismiss: 'alert'}, aria: {label: 'Close'}}
-              %span{aria: {hidden: 'true'}} &times;
-            = msg if msg.is_a?(String)
-
         = yield
