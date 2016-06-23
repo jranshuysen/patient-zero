@@ -14,6 +14,7 @@
       .pull-right
         %button#add_horde.btn.btn-large.btn-primary Add zombie horde
 
+%canvas#canvas
 #map
 
 :javascript
@@ -26,7 +27,7 @@
     else {
       Zombie.placeDestinationMarker(false, #{@game.lat || 0}, #{@game.long || 0})
       Zombie.placeCDCMarker(false, #{@game.cdc_lat || 0}, #{@game.cdc_long || 0})
-      Zombie.startGame(#{@game.locations.order(created_at: :desc).limit(50).to_json(only: [:lat, :long])})
+      Zombie.startGame(#{@game.locations.order(created_at: :desc).limit(100).to_json(only: [:lat, :long])})
     }
 
     $('#add_horde').on('click', function(e) {
