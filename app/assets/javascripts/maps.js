@@ -6,10 +6,12 @@ var Zombie = {
   route: null,
   cable: ActionCable.createConsumer(),
   cable_channel: null,
+  found: false,
   hordes: {}
 };
 
-Zombie.init = function(lat, lng) {
+Zombie.init = function(lat, lng, found=false, started=false) {
+  Zombie.found = found;
   $('#map, #panorama').height($(window).height() - 100)
   var styles = [{"featureType":"all","elementType":"all","stylers":[{"visibility":"simplified"},{"saturation":"-100"},{"invert_lightness":true},{"lightness":"11"},{"gamma":"1.27"}]},{"featureType":"administrative.locality","elementType":"all","stylers":[{"visibility":"off"}]},{"featureType":"landscape.man_made","elementType":"all","stylers":[{"hue":"#ff0000"},{"visibility":"simplified"},{"invert_lightness":true},{"lightness":"-10"},{"gamma":"0.54"},{"saturation":"45"}]},{"featureType":"poi.business","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#ff0000"},{"saturation":"75"},{"lightness":"24"},{"gamma":"0.70"},{"invert_lightness":true}]},{"featureType":"poi.government","elementType":"all","stylers":[{"hue":"#ff0000"},{"visibility":"simplified"},{"invert_lightness":true},{"lightness":"-24"},{"gamma":"0.59"},{"saturation":"59"}]},{"featureType":"poi.medical","elementType":"all","stylers":[{"visibility":"simplified"},{"invert_lightness":true},{"hue":"#ff0000"},{"saturation":"73"},{"lightness":"-24"},{"gamma":"0.59"}]},{"featureType":"poi.park","elementType":"all","stylers":[{"lightness":"-41"}]},{"featureType":"poi.school","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#ff0000"},{"invert_lightness":true},{"saturation":"43"},{"lightness":"-16"},{"gamma":"0.73"}]},{"featureType":"poi.sports_complex","elementType":"all","stylers":[{"hue":"#ff0000"},{"saturation":"43"},{"lightness":"-11"},{"gamma":"0.73"},{"invert_lightness":true}]},{"featureType":"road","elementType":"all","stylers":[{"saturation":"45"},{"lightness":"53"},{"gamma":"0.67"},{"invert_lightness":true},{"hue":"#ff0000"},{"visibility":"simplified"}]},{"featureType":"road","elementType":"labels","stylers":[{"visibility":"off"}]},{"featureType":"transit","elementType":"all","stylers":[{"visibility":"simplified"},{"hue":"#ff0000"},{"saturation":"38"},{"lightness":"-16"},{"gamma":"0.86"}]}]
   var styledMap = new google.maps.StyledMapType(styles, {name: "Zombie"});
@@ -39,39 +41,44 @@ Zombie.init = function(lat, lng) {
     map: Zombie.map
   });
 
-  Zombie.cable_channel = Zombie.cable.subscriptions.create('MessagesChannel', {
-    received: function(data) {
-      // Possible 'action'
-      // - move_target
-      // - create_horde
-      // - update_horde
-      // console.log(data.action, data)
-      if(data.action == 'move_target') {
-        Zombie.moveMarker(data.lat, data.long);
-      } else if(data.action == 'update_horde') {
-        // moving horde!
-        // trying to update a editable horde
-        if(Zombie.hordes[data.horde.id].editing) {
-          return
-        }
+  if(started) {
+    Zombie.cable_channel = Zombie.cable.subscriptions.create('MessagesChannel', {
+      received: function(data) {
+        // Possible 'action'
+        // - move_target
+        // - create_horde
+        // - update_horde
+        // - game_target_found
+        // console.log(data.action, data)
+        if(data.action == 'move_target') {
+          Zombie.moveMarker(data.lat, data.long);
+        } else if(data.action == 'update_horde') {
+          // moving horde!
+          // trying to update a editable horde
+          if(Zombie.hordes[data.horde.id].editing) {
+            return
+          }
 
-        var position = new google.maps.LatLng(data.horde.lat, data.horde.long);
-        Zombie.hordes[data.horde.id].mapObject.setCenter(position);
-        Zombie.hordes[data.horde.id].mapObject.setRadius(data.horde.radius);
-      } else if(data.action == 'create_horde') {
-        // add new horde!
-        Zombie.hordes[data.horde.id] = {
-          id: data.horde.id,
-          lat: data.horde.lat,
-          long: data.horde.long,
-          radius: data.horde.radius,
-          mapObject: null,
-          editing: false
-        };
-        Zombie.addZombieHorde(Zombie.hordes[data.horde.id]);
+          var position = new google.maps.LatLng(data.horde.lat, data.horde.long);
+          Zombie.hordes[data.horde.id].mapObject.setCenter(position);
+          Zombie.hordes[data.horde.id].mapObject.setRadius(data.horde.radius);
+        } else if(data.action == 'create_horde') {
+          // add new horde!
+          Zombie.hordes[data.horde.id] = {
+            id: data.horde.id,
+            lat: data.horde.lat,
+            long: data.horde.long,
+            radius: data.horde.radius,
+            mapObject: null,
+            editing: false
+          };
+          Zombie.addZombieHorde(Zombie.hordes[data.horde.id]);
+        } else if(data.action == 'game_target_found') {
+          Zombie.found = true;
+        }
       }
-    }
-  });
+    });
+  }
 };
 
 Zombie.addZombieHordeFromDB = function(horde) {
@@ -90,9 +97,11 @@ Zombie.moveMarker = function(lat, lng) {
   var latlng = new google.maps.LatLng(lat, lng);
   Zombie.marker.setPosition(latlng);
   Zombie.route.getPath().push(latlng);
-  // if destination found, move it with the marker
-  latlng = new google.maps.LatLng(lat+0.00001650679191, lng+0.00002145767212);
-  Zombie.destinationMarker.setPosition(latlng);
+  if(Zombie.found) {
+    // if destination found, move it with the marker
+    latlng = new google.maps.LatLng(lat+0.00001650679191, lng+0.00002145767212);
+    Zombie.destinationMarker.setPosition(latlng);
+  }
 }
 
 Zombie.startGame = function(locations) {

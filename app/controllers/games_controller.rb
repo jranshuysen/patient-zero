@@ -1,5 +1,5 @@
 class GamesController < ApplicationController
-  before_action :set_game, only: [:show, :edit, :update, :destroy, :finish]
+  before_action :set_game, only: [:show, :edit, :update, :destroy, :finish, :found_target]
 
   # GET /games
   # GET /games.json
@@ -39,7 +39,7 @@ class GamesController < ApplicationController
 
   # POST /games/1/finish
   def finish
-    @game.update_attribute(:finished, true)
+    @game.update(finished: true)
 
     ActionCable.server.broadcast 'messages',
       action: 'game_finished',
@@ -50,9 +50,9 @@ class GamesController < ApplicationController
 
   # POST /games/1/found_target
   def found_target
-    ActionCable.server.broadcast 'messages',
-      action: 'game_target_found',
-      game: @game
+    @game.update(found: true)
+    ActionCable.server.broadcast 'messages', action: 'game_target_found', game: @game
+    render json: {}
   end
 
   # POST /games

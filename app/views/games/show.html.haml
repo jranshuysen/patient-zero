@@ -18,7 +18,7 @@
 
 :javascript
   $(function() {
-    Zombie.init(52.0180795281519, 4.35335045134275)
+    Zombie.init(52.0180795281519, 4.35335045134275, #{@game.found}, #{@game.lat.present?})
     if(#{@game.lat.blank?}) {
       Zombie.placeDestinationMarker(true, 0, 0)
       Zombie.placeCDCMarker(true, 0, 0)
