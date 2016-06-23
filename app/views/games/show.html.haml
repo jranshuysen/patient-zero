@@ -2,8 +2,10 @@
 
 - if @game.lat.blank?
   = bootstrap_form_for(@game) do |f|
-    =f.hidden_field :lat
-    =f.hidden_field :long
+    =f.text_field :lat
+    =f.text_field :long
+    =f.text_field :cdc_lat
+    =f.text_field :cdc_long
     =f.primary 'start'
 - else
   .row
@@ -21,14 +23,15 @@
 
 :javascript
   $(function() {
+    Zombie.init(52.0180795281519, 4.35335045134275)
     if(#{@game.lat.blank?}) {
-      Zombie.init(52.016584, 4.3506897)
       Zombie.placeDestinationMarker(true, 0, 0)
+      Zombie.placeCDCMarker(true, 0, 0)
     }
     else {
-      Zombie.init(#{@game.lat || 0}, #{@game.long || 0});
       Zombie.placeDestinationMarker(false, #{@game.lat || 0}, #{@game.long || 0})
-      Zombie.startGame(52.016584,4.3506897)
+      Zombie.placeCDCMarker(false, #{@game.cdc_lat || 0}, #{@game.cdc_long || 0})
+      Zombie.startGame(#{@game.locations.order(created_at: :desc).limit(50).to_json(only: [:lat, :long])})
     }
 
     $('#add_horde').on('click', function(e) {

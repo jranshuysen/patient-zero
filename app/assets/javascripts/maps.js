@@ -2,6 +2,7 @@ var Zombie = {
   map: null,
   marker: null,
   destinationMarker: null,
+  cdcMarker: null,
   route: null,
   cable: ActionCable.createConsumer(),
   cable_channel: null,
@@ -89,10 +90,16 @@ Zombie.moveMarker = function(lat, lng) {
   var latlng = new google.maps.LatLng(lat, lng);
   Zombie.marker.setPosition(latlng);
   Zombie.route.getPath().push(latlng);
+  // if destination found, move it with the marker
+  // latlng = new google.maps.LatLng(lat+0.00001650679191, lng+0.00002145767212);
+  // Zombie.destinationMarker.setPosition(latlng);
 }
 
-Zombie.startGame = function(lat, lng) {
-  Zombie.moveMarker(lat, lng)
+Zombie.startGame = function(locations) {
+  for(var i=0; i<locations.length; i++) {
+    var loc = locations[i]
+    Zombie.moveMarker(loc.lat, loc.long)
+  }
 };
 
 Zombie.addZombieHorde = function(horde) {
@@ -201,5 +208,35 @@ Zombie.placeDestinationMarker = function(editable, lat, lng) {
       $('#game_lat').val(position.lat());
       $('#game_long').val(position.lng());
     });
+  }
+  // initial setting value
+  $('#game_lat').val(position.lat());
+  $('#game_long').val(position.lng());
+};
+
+Zombie.placeCDCMarker = function(editable, lat, lng) {
+  var position = new google.maps.LatLng(52.017706476140745, 4.353017857424902);
+  if(lat != 0 && lng != 0) {
+    position = new google.maps.LatLng(lat, lng);
+  }
+
+  Zombie.cdcMarker = new google.maps.Marker({
+    map: Zombie.map,
+    draggable: editable,
+    animation: google.maps.Animation.DROP,
+    position: position,
+    icon: '/images/cdc-marker.png'
+  });
+
+  if(editable) {
+    google.maps.event.addListener(Zombie.cdcMarker, 'dragend', function() {
+      position = Zombie.cdcMarker.getPosition();
+
+      $('#game_cdc_lat').val(position.lat());
+      $('#game_cdc_long').val(position.lng());
+    });
+    // initial setting value
+    $('#game_cdc_lat').val(position.lat());
+    $('#game_cdc_long').val(position.lng());
   }
 };
