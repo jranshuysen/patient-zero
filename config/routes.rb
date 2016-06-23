@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :games
   post 'games/new' => 'games#create_new', as: :post_new_game
   post 'games/:id/finish' => 'games#finish', as: :post_stop_game
-  get 'games/:id/found_target' => 'games#found_target', as: :post_found_game
+  post 'games/:id/found_target' => 'games#found_target', as: :post_found_game
 
   resources :locations
 

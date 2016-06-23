@@ -50,7 +50,7 @@ Zombie.init = function(lat, lng, found, started) {
         // - create_horde
         // - update_horde
         // - game_target_found
-        // console.log(data.action, data)
+        console.log(data.action, data)
         if(data.action == 'move_target') {
           Zombie.moveMarker(data.lat, data.long);
         } else if(data.action == 'update_horde') {
