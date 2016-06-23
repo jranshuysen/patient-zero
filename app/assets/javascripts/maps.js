@@ -91,8 +91,8 @@ Zombie.moveMarker = function(lat, lng) {
   Zombie.marker.setPosition(latlng);
   Zombie.route.getPath().push(latlng);
   // if destination found, move it with the marker
-  // latlng = new google.maps.LatLng(lat+0.00001650679191, lng+0.00002145767212);
-  // Zombie.destinationMarker.setPosition(latlng);
+  latlng = new google.maps.LatLng(lat+0.00001650679191, lng+0.00002145767212);
+  Zombie.destinationMarker.setPosition(latlng);
 }
 
 Zombie.startGame = function(locations) {

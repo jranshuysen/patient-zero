@@ -2,10 +2,10 @@
 
 - if @game.lat.blank?
   = bootstrap_form_for(@game) do |f|
-    =f.text_field :lat
-    =f.text_field :long
-    =f.text_field :cdc_lat
-    =f.text_field :cdc_long
+    =f.hidden_field :lat
+    =f.hidden_field :long
+    =f.hidden_field :cdc_lat
+    =f.hidden_field :cdc_long
     =f.primary 'start'
 - else
   .row
