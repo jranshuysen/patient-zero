@@ -41,10 +41,7 @@ class GamesController < ApplicationController
   def finish
     @game.update(finished: true)
 
-    ActionCable.server.broadcast 'messages',
-      action: 'game_finished',
-      game: @game
-
+    ActionCable.server.broadcast 'messages', action: 'game_finished', game: @game
     redirect_to action: "index"
   end
 
