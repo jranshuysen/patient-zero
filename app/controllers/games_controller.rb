@@ -41,7 +41,18 @@ class GamesController < ApplicationController
   def finish
     @game.update_attribute(:finished, true)
 
+    ActionCable.server.broadcast 'messages',
+      action: 'game_finished',
+      game: @game
+
     redirect_to action: "index"
+  end
+
+  # POST /games/1/found_target
+  def found_target
+    ActionCable.server.broadcast 'messages',
+      action: 'game_target_found',
+      game: @game
   end
 
   # POST /games
